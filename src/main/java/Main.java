@@ -23,6 +23,13 @@ public class Main {
 
         //Créer des produits
         Produit tShirt = new Produit("T-Shirt", 49.9, 50, catVetements);
+
+        //Application d'un pourcentage sur le prix
+        tShirt.appliquerPromo(20D);
+
+        //Affichage du nouveau tarif
+        System.out.println("le prix remisé du " + tShirt.getNom() + " est " + tShirt.getPrixFinal());
+
         Produit renault = new Produit("Renault", 15490D, 5, catVehicules);
         Produit armoire = new Produit("Armoire", 159D, 15, catMeubles);
         Produit ampoule = new Produit("Ampoule", 159D, 15, catDivers);
@@ -56,6 +63,19 @@ public class Main {
 
         List<Produit> meublesList = monCatalogue.trouverParCategorie(catMeubles);
         System.out.println("nombre de meuble : " + meublesList.size());
+
+        //afficher la liste des produits en promo
+        List<Produit> promoProductsList = monCatalogue.produitsEnPromo();
+        System.out.println("liste des produits en promo : " + promoProductsList);
+
+        //retirer la promo
+        tShirt.retirerPromo();
+        //Affichage du nouveau tarif
+        System.out.println("le prix du " + tShirt.getNom() + " est " + tShirt.getPrixFinal());
+
+        //afficher la liste des produits en promo
+        promoProductsList = monCatalogue.produitsEnPromo();
+        System.out.println("liste des produits en promo : " + promoProductsList);
 
         //tester l'exception
         try {

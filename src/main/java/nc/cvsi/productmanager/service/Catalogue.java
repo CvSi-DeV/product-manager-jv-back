@@ -53,4 +53,8 @@ public class Catalogue {
         if (produit.getStock() < quantite) throw new StockInsuffisantException("Produit insuffisant");
         produit.setStock((produit.getStock() - quantite));
     }
+
+    public List<Produit> produitsEnPromo() {
+        return produits.stream().filter(p -> Optional.ofNullable(p.getPourcentagePromo()).isPresent()).collect(Collectors.toList());
+    }
 }
