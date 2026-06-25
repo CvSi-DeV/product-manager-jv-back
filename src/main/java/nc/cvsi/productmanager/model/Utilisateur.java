@@ -2,7 +2,7 @@ package nc.cvsi.productmanager.model;
 
 public abstract class Utilisateur {
     private final String email;
-    private String name;
+    private final String name;
 
     public Utilisateur(String email, String name) {
         this.email = email;
@@ -15,10 +15,6 @@ public abstract class Utilisateur {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     abstract public String role();
