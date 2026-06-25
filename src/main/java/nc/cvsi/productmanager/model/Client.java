@@ -10,6 +10,6 @@ public class Client extends Utilisateur {
     }
     @Override
     public void  genererUnRapport() {
-        System.out.println("Générer un rapport");
+        System.out.println("Rapport client généré pour " + getName());
     }
 }
