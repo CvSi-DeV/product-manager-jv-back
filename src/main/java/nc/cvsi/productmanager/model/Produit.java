@@ -3,6 +3,9 @@ package nc.cvsi.productmanager.model;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Produit implements Remisable {
     private final String nom;
     private Long id;
@@ -11,12 +14,17 @@ public class Produit implements Remisable {
     private Categorie categorie;
     private Double pourcentagePromo;
 
-    //Constructeur
+    // Constructeur
     public Produit(String nom, double prix, int stock, Categorie categorie) {
         this(nom, prix, stock, categorie, null);
     }
 
-    public Produit(String nom, Double prix, int stock, Categorie categorie, Double pourcentagePromo) {
+    @JsonCreator
+    public Produit(@JsonProperty("nom") String nom,
+            @JsonProperty("prix") Double prix,
+            @JsonProperty("stock") int stock,
+            @JsonProperty("categorie") Categorie categorie,
+            @JsonProperty("pourcentagePromo") Double pourcentagePromo) {
         this.nom = nom;
         this.prix = prix;
         this.stock = stock;
@@ -24,7 +32,7 @@ public class Produit implements Remisable {
         this.pourcentagePromo = pourcentagePromo;
     }
 
-    //Getter
+    // Getter
     public String getNom() {
         return this.nom;
     }
@@ -37,7 +45,7 @@ public class Produit implements Remisable {
         return this.stock;
     }
 
-    //Setter
+    // Setter
     public void setStock(int stock) {
         this.stock = stock;
     }
@@ -80,8 +88,10 @@ public class Produit implements Remisable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Produit produit)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof Produit produit))
+            return false;
         return Objects.equals(id, produit.id);
     }
 
@@ -90,4 +100,3 @@ public class Produit implements Remisable {
         return Objects.hashCode(id);
     }
 }
-

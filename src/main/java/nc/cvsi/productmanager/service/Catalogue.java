@@ -11,6 +11,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class Catalogue {
     private final List<Produit> produits;
     private Long nextId = 1L;
@@ -23,9 +26,10 @@ public class Catalogue {
      * @param produit Incrémente l'Id du produit
      *                Ajoute un produit au catalogue
      */
-    public void addProduit(Produit produit) {
+    public Produit addProduit(Produit produit) {
         produit.setId(nextId++);
-        produits.add(produit);
+        this.produits.add(produit);
+        return produit;
     }
 
     public List<Produit> produits() {
@@ -50,11 +54,13 @@ public class Catalogue {
 
     public void decrementerStock(Long produitId, Integer quantite) {
         Produit produit = trouverParIdOuLever(produitId);
-        if (produit.getStock() < quantite) throw new StockInsuffisantException("Produit insuffisant");
+        if (produit.getStock() < quantite)
+            throw new StockInsuffisantException("Produit insuffisant");
         produit.setStock((produit.getStock() - quantite));
     }
 
     public List<Produit> produitsEnPromo() {
-        return produits.stream().filter(p -> Optional.ofNullable(p.getPourcentagePromo()).isPresent()).collect(Collectors.toList());
+        return produits.stream().filter(p -> Optional.ofNullable(p.getPourcentagePromo()).isPresent())
+                .collect(Collectors.toList());
     }
 }
