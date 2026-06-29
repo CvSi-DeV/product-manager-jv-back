@@ -6,15 +6,32 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+@Entity
 public class Produit implements Remisable {
-    private final String nom;
+    private String nom;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double prix;
     private int stock;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "categorie_id")
     private Categorie categorie;
     private Double pourcentagePromo;
 
     // Constructeur
+    protected Produit() {
+
+    }
+
     public Produit(String nom, double prix, int stock, Categorie categorie) {
         this(nom, prix, stock, categorie, null);
     }
@@ -54,16 +71,16 @@ public class Produit implements Remisable {
         return this.categorie;
     }
 
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
+    }
+
     public Double getPourcentagePromo() {
         return this.pourcentagePromo;
     }
 
     public Long getId() {
         return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void appliquerPromo(Double pourcentagePromo) {

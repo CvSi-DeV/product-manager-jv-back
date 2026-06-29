@@ -16,4 +16,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleStockInsuffisantException(StockInsuffisantException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
+
+    @ExceptionHandler(CategorieNonTrouveException.class)
+    public ResponseEntity<String> handleCategorieNonTrouveException(CategorieNonTrouveException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
 }

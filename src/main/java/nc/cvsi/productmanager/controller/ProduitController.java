@@ -1,55 +1,62 @@
 package nc.cvsi.productmanager.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import nc.cvsi.productmanager.service.Catalogue;
-import nc.cvsi.productmanager.model.*;
-import java.util.List;
+import nc.cvsi.productmanager.model.Produit;
+import nc.cvsi.productmanager.service.ProduitService;
 
 @RestController
 @RequestMapping("/api/produits")
 public class ProduitController {
-    private final Catalogue catalogue;
+    private final ProduitService produitService;
 
-    public ProduitController(Catalogue catalogue) {
-        this.catalogue = catalogue;
+    public ProduitController(ProduitService produitService) {
+        this.produitService = produitService;
     }
 
     @GetMapping("")
     public List<Produit> getProduit() {
-        return this.catalogue.produits();
+        return this.produitService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Produit getProduit(@PathVariable Long id) {
-        return this.catalogue.trouverParIdOuLever(id);
+    public Produit getProduit(@PathVariable @NonNull Long id) {
+        return this.produitService.findById(id);
     }
 
     @GetMapping("/categorie/{categorie}")
     public List<Produit> getProduitParCategorie(@PathVariable String categorie) {
-        Categorie cCategorie = new Categorie(categorie);
-        return this.catalogue.trouverParCategorie(cCategorie);
+        return this.produitService.findByCategorie(categorie);
     }
 
     @GetMapping("/promos")
     public List<Produit> getProduitEnPromo() {
-        return this.catalogue.produitsEnPromo();
+        return this.produitService.produitsEnPromo();
     }
 
     @GetMapping("/valeur-totale")
     public Double getValeurTotale() {
-        return this.catalogue.valeurTotaleStock();
+        return this.produitService.valeurTotaleStock();
     }
 
     @PostMapping("")
-    public ResponseEntity<Produit> addProduit(@RequestBody Produit produit) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.catalogue.addProduit(produit));
+    public ResponseEntity<Produit> addProduit(@RequestBody @NonNull Produit produit) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.produitService.save(produit));
+    }
+
+    @PatchMapping("/{id}/decrement/{quantite}")
+    public ResponseEntity<Produit> decrementeProduit(@PathVariable long id, @PathVariable int quantite) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.produitService.decrementerStock(id, quantite));
     }
 }
